@@ -1,0 +1,127 @@
+{
+    "general":
+    {
+        "verbose": 3,
+        "cores": 0,
+        "memory": 0,
+        "netlist":
+        {
+            "file": "../squaring/input_distribution_0/5bits/VERICA/SQ_3SHARE_gamma.v"
+        },
+        "library":
+        {
+            "file": "cell/nang45.txt",
+            "name": "NANG45"
+        },
+        "filtering":
+        {
+            "sca":
+            {
+                "type": "none",
+                "whitelist": "model/sca-whitelist",
+                "blacklist": "model/sca-blacklist"
+            },
+            "fia":
+            {
+                "type": "none",
+                "whitelist": "model/fia-whitelist",
+                "blacklist": "model/fia-blacklist"
+            }
+        },
+
+        "annotation":
+        {
+            "file": "../squaring/input_distribution_0/5bits/VERICA/annotation_SQ_3SHARE.json",
+            "apply": true
+        },
+        "cudd":
+        {
+            "reordering": false
+        },
+        "visualization":
+        {
+            "enable": false,
+            "path": "dot/",
+            "full": false,
+            "partial": false
+        }
+    },
+
+    "side-channel":
+    {
+        "enable": true,
+        "configuration":
+        {
+            "order": 2,
+            "variate": 0,
+            "masking": 0,
+            "interrupt": false
+        },
+        "model":
+        {
+            "glitches": true,
+            "transitions": false,
+            "couplings": false
+        },
+        "analysis": 
+        {
+            "uniformity": false,
+            "probing": false,
+            "p-ni": false,
+            "p-sni": false,
+            "pini": true
+        },
+        "vulnerability":
+        {
+            "enable" : false,
+            "unshare_outputs" : false,
+            "estimator" : false,
+            "runs" : 0
+        }
+    },
+
+    "fault-injection":
+    {
+        "enable": false,
+        "configuration":
+        {
+            "number": 0,
+            "variate": 0,
+            "interrupt": false
+        },
+        "model": 
+        {
+            "mapping": "model/setreset.txt",
+            "location": "cs"
+        },
+        "analysis":
+        {
+            "reduced_complexity": false,
+            "strategy": "correction",
+            "logic-level-error-flag": true,
+            "f-ni": false,
+            "f-sni": false,
+            "fini": false
+        },       
+        "vulnerability":
+        {
+            "enable" : false,
+            "unshare_outputs" : false,
+            "estimator" : false,
+            "runs" : 0
+        }
+    },
+
+    "combined": 
+    {
+        "enable": false,
+        "analysis":
+        {
+            "c-ni": false,
+            "c-sni": false,
+            "ic-sni": false,
+            "cini": false,
+            "icini": false
+        }
+    }
+}
