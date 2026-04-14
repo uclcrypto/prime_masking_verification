@@ -6,7 +6,7 @@
         "memory": 0,
         "netlist":
         {
-            "file": "../squaring/input_distribution_1/2bits/VERICA/SQ_3SHARE_beta.v"
+            "file": "../prime_masking_verification/Netlists/squaring/input_distribution_1/2bits/VERICA/SQ_3SHARE_beta.v"
         },
         "library":
         {
@@ -31,7 +31,7 @@
 
         "annotation":
         {
-            "file": "../squaring/input_distribution_1/2bits/VERICA/annotation_SQ_3SHARE.json",
+            "file": "../prime_masking_verification/Netlists/squaring/input_distribution_1/2bits/VERICA/annotation_SQ_3SHARE.json",
             "apply": true
         },
         "cudd":
