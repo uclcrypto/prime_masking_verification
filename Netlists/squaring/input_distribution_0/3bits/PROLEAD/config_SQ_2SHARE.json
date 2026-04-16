@@ -1,0 +1,59 @@
+{
+  "performance": {
+    "max_number_of_threads": "half",
+    "minimize_probing_sets": "aggressive"
+  },
+  "input_finite_field": {
+    "base" : 7, 
+    "exponent" : 1
+  },
+  "output_finite_field": {
+    "base" : 7, 
+    "exponent" : 1
+  }, 
+  "simulation": {
+    "groups": [
+      "9'b$$$$$$$$$",
+      "9'b$$$$$$100"
+    ],
+    "number_of_clock_cycles": 4,
+    "output_shares": [
+      "b0[2:0]",
+      "b1[2:0]"
+    ],
+    "expected_output":[
+      "3'b$$$",
+      "3'b010"
+    ],
+    "input_sequence": [
+      {
+        "signals": [
+          {
+            "name": "a0[2:0]",
+            "value": "group_in0[2:0]"
+          },
+          {
+            "name": "a1[2:0]",
+            "value": "group_in1[2:0]"
+          },
+          {
+            "name": "r0[2:0]",
+            "value": "group_in0[5:3]"
+          },
+          {
+            "name": "r1[2:0]",
+            "value": "group_in0[8:6]"
+          }
+        ]
+      }
+    ],
+    "number_of_simulations": 102400,
+    "number_of_simulations_per_step": 1024
+  },
+  "hardware": {
+    "clock_signal_name": "clk"
+  },
+  "side_channel_analysis": {
+    "order": 1
+  }
+}

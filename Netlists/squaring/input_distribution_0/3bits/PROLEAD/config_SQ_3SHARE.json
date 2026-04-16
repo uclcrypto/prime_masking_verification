@@ -1,0 +1,93 @@
+{
+  "performance": {
+    "max_number_of_threads": "half",
+    "minimize_probing_sets": "aggressive"
+  },
+  "input_finite_field": {
+    "base" : 7, 
+    "exponent" : 1
+  },
+  "output_finite_field": {
+    "base" : 7, 
+    "exponent" : 1
+  }, 
+  "simulation": {   
+    "groups": [
+      "18'b$$$$$$$$$$$$$$$$$$",
+      "18'b$$$$$$$$$$$$$$$100"
+    ],
+    "number_of_clock_cycles": 6,
+    "output_shares": [
+      "b0[2:0]",
+      "b1[2:0]",
+      "b2[2:0]"
+    ],
+    "expected_output":[
+      "3'b$$$",
+      "3'b010"
+    ],
+    "input_sequence": [
+      {
+        "signals": [
+          {
+            "name": "a0[2:0]",
+            "value": "3'b000"
+          },
+          {
+            "name": "a1[2:0]",
+            "value": "3'b000"
+          },
+          {
+            "name": "a2[2:0]",
+            "value": "3'b000"
+          },
+          {
+            "name": "r3[2:0]",
+            "value": "group_in0[14:12]"
+          },
+          {
+            "name": "r4[2:0]",
+            "value": "group_in0[17:15]"
+          }
+        ],
+        "hold_for_cycles": 2
+      },
+      {
+        "signals": [
+          {
+            "name": "a0[2:0]",
+            "value": "group_in0[2:0]"
+          },
+          {
+            "name": "a1[2:0]",
+            "value": "group_in1[2:0]"
+          },
+          {
+            "name": "a2[2:0]",
+            "value": "group_in2[2:0]"
+          },
+          {
+            "name": "r0[2:0]",
+            "value": "group_in0[5:3]"
+          },
+          {
+            "name": "r1[2:0]",
+            "value": "group_in0[8:6]"
+          },
+          {
+            "name": "r2[2:0]",
+            "value": "group_in0[11:9]"
+          }
+        ]
+      }
+    ],
+    "number_of_simulations": 512000,
+    "number_of_simulations_per_step": 5120
+  },
+  "hardware": {
+    "clock_signal_name": "clk"
+  },
+  "side_channel_analysis": {
+    "order": 2
+  }
+}
