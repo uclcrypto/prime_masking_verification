@@ -11,6 +11,7 @@ architecture Behavioral of TB_small_pSquare_4SHARES is
     component small_pSquare_4SHARES is
         Port ( clk : in STD_LOGIC;
                rst : in STD_LOGIC;
+               read_inpt : in STD_LOGIC;
                plaintext_s0 : in small_pSquare_state;
                plaintext_s1 : in small_pSquare_state;
                plaintext_s2 : in small_pSquare_state;
@@ -35,17 +36,17 @@ architecture Behavioral of TB_small_pSquare_4SHARES is
                c : out UNSIGNED (bits-1 downto 0));
     end component;
     
-    signal clk, rst, done : STD_LOGIC;
+    signal clk, rst, read_inpt, done : STD_LOGIC;
     signal plaintext, key, tweak, ciphertext : small_pSquare_state;
     signal plaintext_t1, plaintext_t2, key_t1, key_t2, ciphertext_t1, ciphertext_t2 : small_pSquare_state;
     signal plaintext_s0, plaintext_s1, plaintext_s2, plaintext_s3, key_s0, key_s1, key_s2, key_s3, ciphertext_s0, ciphertext_s1, ciphertext_s2, ciphertext_s3 : small_pSquare_state;
     signal fresh_randomness : small_pSquare_4SHARES_randomness;
-    constant clk_period : time := 10 ns;
+    constant clk_period : time := 10ns;
 
 begin
 
     -- Unit Under Test
-    UUT: small_pSquare_4SHARES Port Map (clk, rst, plaintext_s0, plaintext_s1, plaintext_s2, plaintext_s3, key_s0, key_s1, key_s2, key_s3, tweak, fresh_randomness, ciphertext_s0, ciphertext_s1, ciphertext_s2, ciphertext_s3, done);
+    UUT: small_pSquare_4SHARES Port Map (clk, rst, read_inpt, plaintext_s0, plaintext_s1, plaintext_s2, plaintext_s3, key_s0, key_s1, key_s2, key_s3, tweak, fresh_randomness, ciphertext_s0, ciphertext_s1, ciphertext_s2, ciphertext_s3, done);
     
     -- Masking and Unmasking
     MaskUnmask: for i in 0 to 15 generate
@@ -63,9 +64,9 @@ begin
     -- Clock Process
     clk_proc: process
     begin
-        clk <= '1';
-        wait for clk_period/2;
         clk <= '0';
+        wait for clk_period/2;
+        clk <= '1';
         wait for clk_period/2;
     end process;
     
@@ -73,6 +74,7 @@ begin
     stim_proc: process
     begin
         rst                 <= '1';
+        read_inpt          <= '0';
         
         -- Test Vector 1
         plaintext_s0        <= ("0011001", "1101110", "1001101", "0011001", "0111101", "1000101", "0011111", "0001111", "0000111", "0011001", "1101110", "1000111", "0000001", "1101101", "0010000", "0101110");
@@ -86,7 +88,29 @@ begin
         tweak               <= ("0110010", "0111001", "1001001", "1011010", "1011101", "0101111", "0001101", "0100000", "1110000", "1110111", "1000001", "1011111", "1011111", "1011100", "0010110", "1100001");
         fresh_randomness    <= ("1100101", "1100110", "0001011", "0000000", "1110101", "0100001", "1010010", "1110101", "1101101", "1100000", "0010000", "0011010", "0001110", "1000100", "0011110", "0010010", "1011001", "0001101", "1110001", "1011010", "1000011", "0100110", "0011111", "1010100", "0100111", "0111111", "0000100", "0000001", "1100111", "1001110", "0001110", "0101000", "1001100", "1101001", "0111000", "0100010", "0010000", "1000100", "0111110", "1001111", "1010110", "1101000", "0000001", "1111011", "1100010", "1011011", "1001000", "1010010", "0100100", "1001110", "1000101", "1110011", "0110000", "0010000", "1100100", "0001011", "0110000", "1010100", "0010001", "0111000", "0011011", "0010000", "1001111", "1010111", "0100000", "1111000", "1001101", "1110110", "1011101", "1100011", "1100011", "1100001");
         
-        wait for 5*clk_period;
+        wait for 2*clk_period;
+        
+        read_inpt           <= '1';
+
+        wait for clk_period;
+        
+        rst                 <= '0';
+        read_inpt           <= '0';
+        
+        wait until done = '1';
+        
+        wait for clk_period;
+        
+        if(ciphertext = ("1111101", "1110110", "1111010", "1110100", "0000110", "1010110", "0001011", "1000001", "1000101", "0010111", "1100111", "1011011", "1110000", "0001111", "1100010", "0011100")) then
+            report "SUCCESS";
+        else
+            report "FAILURE";
+        end if;
+        
+        wait for clk_period;
+        
+        rst                 <= '1';
+        read_inpt           <= '0';
         
         -- Test Vector 2
         plaintext_s0        <= ("0011100", "0011100", "0011111", "1000000", "0100111", "0100100", "0101011", "1011001", "0001111", "1110110", "0010011", "0001011", "0000010", "0001010", "0001010", "1011101");
@@ -100,17 +124,16 @@ begin
         tweak               <= ("1101110", "0000111", "0010010", "1110011", "0010100", "1100100", "1111000", "0000110", "0100100", "1101111", "0111011", "0011101", "1110001", "0100001", "1110001", "1001100");
         fresh_randomness    <= ("0010100", "1001010", "0011111", "0111101", "1110010", "0001110", "1011110", "0011111", "1110101", "0000110", "1101000", "0001000", "0111100", "0110111", "0111100", "0101000", "1101011", "0010000", "1010111", "1100110", "1101100", "1011111", "0101000", "1101111", "1111101", "0111111", "1101101", "0001111", "0101011", "1010010", "1110011", "0011010", "0011011", "1101010", "1101001", "0100011", "1011100", "1001101", "0011101", "1010101", "0100011", "0100111", "1010111", "1111101", "1111100", "1101100", "0111111", "0100011", "0011010", "0111111", "1010011", "1110100", "0011011", "0011011", "0010111", "0111101", "1111010", "0111100", "1010110", "1011001", "0001011", "0111001", "0101100", "0011101", "0101010", "0010010", "0111000", "0001000", "0010011", "1010011", "0011100", "0100010");
     
+        wait for 2*clk_period;
+        
+        read_inpt           <= '1';
+
         wait for clk_period;
         
         rst                 <= '0';
+        read_inpt           <= '0';
         
         wait until done = '1';
-        
-        if(ciphertext = ("1111101", "1110110", "1111010", "1110100", "0000110", "1010110", "0001011", "1000001", "1000101", "0010111", "1100111", "1011011", "1110000", "0001111", "1100010", "0011100")) then
-            report "SUCCESS";
-        else
-            report "FAILURE";
-        end if;
         
         wait for clk_period;
         

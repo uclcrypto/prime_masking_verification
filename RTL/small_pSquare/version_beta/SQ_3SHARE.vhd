@@ -5,7 +5,6 @@ use IEEE.NUMERIC_STD.ALL;
 entity SQ_3SHARE is
     Generic (bits : INTEGER := 7);
     Port ( clk : in STD_LOGIC;
-           en : in STD_LOGIC;
            a0 : in UNSIGNED (bits-1 downto 0);
            a1 : in UNSIGNED (bits-1 downto 0);
            a2 : in UNSIGNED (bits-1 downto 0);
@@ -54,21 +53,20 @@ architecture Behavioral of SQ_3SHARE is
     component FF is
         Generic ( bits : INTEGER := 7);
         Port ( clk : in STD_LOGIC;
-               en : in STD_LOGIC;
-               input : in UNSIGNED ((bits-1) downto 0);
-               output : out UNSIGNED ((bits-1) downto 0));
+               inpt : in UNSIGNED ((bits-1) downto 0);
+               outpt : out UNSIGNED ((bits-1) downto 0));
     end component;
     
     signal r3_r, r4_r, r5_r, r3_rr, r4_rr, r5_rr, a02, a12, a22, a12r0, a22r1, a02r2, a0r0, a1r1, a2r2, a0r0a0r3, a1r1a1r4, a2r2a2r5, a0_r, a1_r, a2_r, a12r0_r, a22r1_r, a02r2_r, a0r0a0r3_r, a1r1a1r4_r, a2r2a2r5_r : UNSIGNED (bits-1 downto 0);
     
 begin
 
-    FF1 : FF Generic Map (bits) Port Map (clk, en, r3, r3_r);
-    FF2 : FF Generic Map (bits) Port Map (clk, en, r4, r4_r);
+    FF1 : FF Generic Map (bits) Port Map (clk, r3, r3_r);
+    FF2 : FF Generic Map (bits) Port Map (clk, r4, r4_r);
     Add1 : AddModMersenne Generic Map (bits) Port Map (r3_r, r4_r, r5_r);
-    FF3 : FF Generic Map (bits) Port Map (clk, en, r3_r, r3_rr);
-    FF4 : FF Generic Map (bits) Port Map (clk, en, r4_r, r4_rr);
-    FF5 : FF Generic Map (bits) Port Map (clk, en, r5_r, r5_rr);
+    FF3 : FF Generic Map (bits) Port Map (clk, r3_r, r3_rr);
+    FF4 : FF Generic Map (bits) Port Map (clk, r4_r, r4_rr);
+    FF5 : FF Generic Map (bits) Port Map (clk, r5_r, r5_rr);
     
     a02 <= a0(bits-2 downto 0) & a0(bits-1);
     a12 <= a1(bits-2 downto 0) & a1(bits-1);
@@ -83,15 +81,15 @@ begin
     MulAdd2 : MulAddModMersenne Generic Map (bits) Port Map (a1r1, a1, r4_rr, a1r1a1r4);
     MulSub1 : MulSubModMersenne Generic Map (bits) Port Map (a2r2, a2, r5_rr, a2r2a2r5);
 
-    FF6 : FF Generic Map (bits) Port Map (clk, en, a0, a0_r);
-    FF7 : FF Generic Map (bits) Port Map (clk, en, a1, a1_r);
-    FF8 : FF Generic Map (bits) Port Map (clk, en, a2, a2_r);
-    FF9 : FF Generic Map (bits) Port Map (clk, en, a12r0, a12r0_r);
-    FF10 : FF Generic Map (bits) Port Map (clk, en, a22r1, a22r1_r);
-    FF11 : FF Generic Map (bits) Port Map (clk, en, a02r2, a02r2_r);
-    FF12 : FF Generic Map (bits) Port Map (clk, en, a0r0a0r3, a0r0a0r3_r);
-    FF13 : FF Generic Map (bits) Port Map (clk, en, a1r1a1r4, a1r1a1r4_r);
-    FF14 : FF Generic Map (bits) Port Map (clk, en, a2r2a2r5, a2r2a2r5_r);
+    FF6 : FF Generic Map (bits) Port Map (clk, a0, a0_r);
+    FF7 : FF Generic Map (bits) Port Map (clk, a1, a1_r);
+    FF8 : FF Generic Map (bits) Port Map (clk, a2, a2_r);
+    FF9 : FF Generic Map (bits) Port Map (clk, a12r0, a12r0_r);
+    FF10 : FF Generic Map (bits) Port Map (clk, a22r1, a22r1_r);
+    FF11 : FF Generic Map (bits) Port Map (clk, a02r2, a02r2_r);
+    FF12 : FF Generic Map (bits) Port Map (clk, a0r0a0r3, a0r0a0r3_r);
+    FF13 : FF Generic Map (bits) Port Map (clk, a1r1a1r4, a1r1a1r4_r);
+    FF14 : FF Generic Map (bits) Port Map (clk, a2r2a2r5, a2r2a2r5_r);
     
     MulAdd3 : MulAddModMersenne Generic Map (bits) Port Map (a12r0_r, a0_r, a0r0a0r3_r, b0);
     MulAdd4 : MulAddModMersenne Generic Map (bits) Port Map (a22r1_r, a1_r, a1r1a1r4_r, b1);
